@@ -88,6 +88,23 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "meal-planner:build:production",
+              "serveTarget": "meal-planner:serve:production"
+            },
+            "development": {
+              "buildTarget": "meal-planner:build:development",
+              "serveTarget": "meal-planner:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
