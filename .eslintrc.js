@@ -22,5 +22,6 @@ module.exports = {
     rules: {
         '@typescript-eslint/semi': ['error', 'always'],
         '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
+        quotes: ['error', 'single'],
     },
 };

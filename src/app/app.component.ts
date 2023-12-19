@@ -18,10 +18,7 @@ export class AppComponent {
     items$: Observable<any[]>;
 
     constructor() {
-        const aCollection = collection(
-            this.firestore,
-            `users/${userId}/recipes`,
-        );
+        const aCollection = collection(this.firestore, `users/${userId}/recipes`);
         this.items$ = collectionData(aCollection);
     }
 }
