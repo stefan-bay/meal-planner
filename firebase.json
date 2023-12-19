@@ -1,9 +1,9 @@
 {
-  "hosting": [
-    {
-      "target": "meal-planner",
-      "source": ".",
-      "frameworksBackend": {}
-    }
-  ]
+    "hosting": [
+        {
+            "target": "meal-planner",
+            "source": ".",
+            "frameworksBackend": {}
+        }
+    ]
 }

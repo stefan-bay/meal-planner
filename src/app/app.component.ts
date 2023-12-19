@@ -7,18 +7,21 @@ import { type Observable } from 'rxjs';
 const userId = 'vi9c6IYy65nw3I8Bo2bJ';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+    selector: 'app-root',
+    standalone: true,
+    imports: [CommonModule, RouterOutlet],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
 })
 export class AppComponent {
-  firestore: Firestore = inject(Firestore);
-  items$: Observable<any[]>;
+    firestore: Firestore = inject(Firestore);
+    items$: Observable<any[]>;
 
-  constructor () {
-    const aCollection = collection(this.firestore, `users/${userId}/recipes`);
-    this.items$ = collectionData(aCollection);
-  }
+    constructor() {
+        const aCollection = collection(
+            this.firestore,
+            `users/${userId}/recipes`,
+        );
+        this.items$ = collectionData(aCollection);
+    }
 }
