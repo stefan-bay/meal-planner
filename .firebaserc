@@ -1,14 +1,8 @@
 {
-  "targets": {
-    "meal-planner-57314": {
-      "hosting": {
-        "meal-planner": [
-          "meal-planner-57314"
-        ]
-      }
+    "targets": {
+        "meal-planner-57314": {}
+    },
+    "projects": {
+        "default": "meal-planner-57314"
     }
-  },
-  "projects": {
-    "default": "meal-planner-57314"
-  }
 }

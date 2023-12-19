@@ -1,9 +1,6 @@
 {
-    "hosting": [
-        {
-            "target": "meal-planner",
-            "source": ".",
-            "frameworksBackend": {}
-        }
-    ]
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    }
 }
