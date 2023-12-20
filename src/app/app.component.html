@@ -1,7 +1,12 @@
-<ul class="pl-10">
-    <li *ngFor="let item of items$ | async">
-        {{ item.name }}
-    </li>
-</ul>
+<div
+    class="fixed bottom-0 m-0 flex h-20 w-screen flex-row items-center bg-gray-400 px-2 md:top-0 md:h-screen md:w-16 md:flex-col md:py-2"
+>
+    <app-sidebar-icon>
+        <i class="gg-home-alt"></i>
+    </app-sidebar-icon>
+    <app-sidebar-icon>
+        <i class="gg-list"></i>
+    </app-sidebar-icon>
+</div>
 
 <router-outlet></router-outlet>

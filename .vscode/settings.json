@@ -1,6 +1,6 @@
 {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "[html]": {
-        "editor.wordWrap": "bounded"
+        "editor.wordWrap": "on"
     }
 }
