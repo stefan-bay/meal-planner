@@ -8,8 +8,9 @@ import { Component } from '@angular/core';
         class="
         relative m-2 flex h-14 w-14
         items-center justify-center
-        rounded-md bg-gray-500 text-white shadow-lg
-        transition-all hover:bg-gray-600
+        rounded-md border-black bg-white text-black shadow-lg
+        transition-all hover:bg-blue-400
+        dark:bg-gray-700 dark:text-white dark:hover:bg-blue-400
         md:h-12 md:w-12
         "
     >
