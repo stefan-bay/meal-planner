@@ -14,11 +14,10 @@ const userId = 'vi9c6IYy65nw3I8Bo2bJ';
     templateUrl: './app.component.html',
 })
 export class AppComponent {
-    firestore: Firestore = inject(Firestore);
-    items$: Observable<any[]>;
-
-    constructor() {
-        const aCollection = collection(this.firestore, `users/${userId}/recipes`);
-        this.items$ = collectionData(aCollection);
-    }
+    // firestore: Firestore = inject(Firestore);
+    // items$: Observable<any[]>;
+    // constructor() {
+    // const aCollection = collection(this.firestore, `users/${userId}/recipes`);
+    // this.items$ = collectionData(aCollection);
+    // }
 }
