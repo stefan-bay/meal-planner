@@ -1,20 +1,24 @@
-<div class="flex">
-    <div
-        class="fixed bottom-0 m-0 flex h-20 w-screen flex-row items-center bg-gray-300 px-2 dark:bg-gray-900 md:top-0 md:h-screen md:w-16 md:flex-col md:py-2"
-    >
-        <a routerLink="/">
-            <app-sidebar-icon>
-                <i class="gg-home-alt"></i>
-            </app-sidebar-icon>
-        </a>
-        <a routerLink="/recipes">
-            <app-sidebar-icon>
-                <i class="gg-list"></i>
-            </app-sidebar-icon>
-        </a>
-    </div>
-
-    <div class="m-0 flex h-full w-full md:ml-16">
-        <router-outlet></router-outlet>
-    </div>
+<div
+    class="fixed bottom-0 flex h-20 w-screen flex-row items-center bg-gray-300 px-2 blur-none dark:bg-gray-900 md:top-0 md:h-screen md:w-16 md:flex-col md:py-2"
+>
+    <a routerLink="/">
+        <app-sidebar-icon>
+            <i class="gg-home-alt"></i>
+        </app-sidebar-icon>
+    </a>
+    <a routerLink="/recipes">
+        <app-sidebar-icon>
+            <i class="gg-list"></i>
+        </app-sidebar-icon>
+    </a>
+    <a class="md:mt-auto">
+        <app-sidebar-icon>
+            <i class="gg-options"></i>
+        </app-sidebar-icon>
+    </a>
 </div>
+
+<main class="mb-20 p-2 md:ml-16">
+    <router-outlet></router-outlet>
+</main>
+<div></div>
