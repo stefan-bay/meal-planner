@@ -1,1 +1,29 @@
-<p>recipes-page works!</p>
+<div class="col-auto grid grid-cols-1 md:grid-cols-2">
+    @for (recipe of [rec, rec, rec, rec, rec, rec, rec, rec]; track $index) {
+        <div class="w-100% rounded-md bg-neutral-600 p-2 text-gray-400 shadow-lg sm:w-96">
+            <b class="text-gray-300">{{ recipe.name }}</b>
+            <!-- Ingredients -->
+            <div class="flex flex-wrap">
+                @for (ingredient of recipe.items; track $index) {
+                    <div class="each mr-2 flex flex-row">
+                        <div class="text-blue-500">
+                            {{ ingredient.quantity }}
+                        </div>
+                        <div class="mr-1 text-gray-400">
+                            {{ ingredient.unit }}
+                        </div>
+                        <div>
+                            {{ ingredient.name }}
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- Instructions -->
+            <div class="mt-2">
+                <i>
+                    {{ recipe.instructions }}
+                </i>
+            </div>
+        </div>
+    }
+</div>
