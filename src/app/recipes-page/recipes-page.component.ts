@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TopbarComponent } from '../topbar/topbar.component';
+import { TopbarComponent } from '../navigation/topbar/topbar.component';
 
 @Component({
     selector: 'app-recipes-page',

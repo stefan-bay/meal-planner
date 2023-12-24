@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { type Observable } from 'rxjs';
-import { SidebarIconComponent } from './sidebar-icon/sidebar-icon.component';
+import { SidebarIconComponent } from './navigation/sidebar-icon/sidebar-icon.component';
 
 const userId = 'vi9c6IYy65nw3I8Bo2bJ';
 
