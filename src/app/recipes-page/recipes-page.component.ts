@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { TopbarComponent } from '../topbar/topbar.component';
 
 @Component({
     selector: 'app-recipes-page',
     standalone: true,
-    imports: [],
+    imports: [TopbarComponent],
     templateUrl: './recipes-page.component.html',
 })
 export class RecipesPageComponent {

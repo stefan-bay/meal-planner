@@ -1,15 +1,27 @@
-<div class="col-auto grid grid-cols-1 md:grid-cols-2">
-    @for (recipe of [rec, rec, rec, rec, rec, rec, rec, rec]; track $index) {
-        <div class="w-100% rounded-md bg-neutral-600 p-2 text-gray-400 shadow-lg sm:w-96">
-            <b class="text-gray-300">{{ recipe.name }}</b>
+<app-topbar>
+    <div class="text-xl"><b>Recipes</b></div>
+    <div
+        class="ml-auto w-fit cursor-pointer rounded-lg bg-gray-300 px-4 py-5 hover:bg-blue-300 dark:bg-gray-600 dark:hover:bg-blue-700"
+    >
+        <i class="gg-math-plus"></i>
+    </div>
+</app-topbar>
+
+<div class="px-3 pt-3 dark:bg-gray-700">
+    @for (
+        recipe of [rec, rec, rec, rec, rec, rec, rec, rec, rec, rec, rec, rec, rec, rec, rec, rec, rec];
+        track $index
+    ) {
+        <div class="mb-4 w-full rounded-md bg-gray-200 p-2 shadow-lg dark:bg-neutral-600 dark:text-gray-400">
+            <b class="dark:text-gray-300">{{ rec.name }}</b>
             <!-- Ingredients -->
             <div class="flex flex-wrap">
                 @for (ingredient of recipe.items; track $index) {
-                    <div class="each mr-2 flex flex-row">
-                        <div class="text-blue-500">
+                    <div class="mr-2 flex flex-row">
+                        <div class="text-blue-700 dark:text-blue-500">
                             {{ ingredient.quantity }}
                         </div>
-                        <div class="mr-1 text-gray-400">
+                        <div class="mr-1 text-gray-500 dark:text-gray-400">
                             {{ ingredient.unit }}
                         </div>
                         <div>
@@ -21,9 +33,10 @@
             <!-- Instructions -->
             <div class="mt-2">
                 <i>
-                    {{ recipe.instructions }}
+                    {{ rec.instructions }}
                 </i>
             </div>
         </div>
     }
+    <div class="h-4"></div>
 </div>
