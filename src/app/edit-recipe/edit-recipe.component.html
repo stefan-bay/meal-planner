@@ -1,0 +1,95 @@
+<app-topbar>
+    <b class="text-xl">New Recipe</b>
+    <button
+        class="backgrou ml-auto flex w-24 items-baseline justify-center rounded-md py-2 transition-all hover:bg-gray-300"
+        type="button"
+        (click)="saveClicked()"
+    >
+        <div class="mr-3 mt-2">
+            <i class="gg-cloud"></i>
+        </div>
+        Save
+    </button>
+</app-topbar>
+
+<div class="h-[calc(100vh-3rem)] w-full dark:bg-gray-700 dark:text-gray-200">
+    <div class="h-full w-full p-4">
+        <form [formGroup]="recipeForm">
+            <!-- Title -->
+            <div class="flex flex-row items-center">
+                <label class="text-xl" for="name">Title: </label>
+                <input
+                    formControlName="name"
+                    class="ml-2 w-full flex-1 bg-gray-200 p-2 dark:bg-gray-800"
+                    (keyup.enter)="addItem()"
+                />
+            </div>
+
+            <!-- Ingredients -->
+            <div class="w-full" formArrayName="items">
+                <div class="mb-1 mt-2 text-xl">Ingredients</div>
+                <div class="mb-1 flex flex-col">
+                    <div
+                        *ngFor="let itemForm of items.controls; let i = index"
+                        [formGroupName]="i"
+                        class="flex items-center"
+                    >
+                        <button (click)="removeItem(i)" class="mr-2 h-fit w-fit justify-center" type="button">
+                            <i class="gg-remove-r"></i>
+                        </button>
+                        <div class="mr-1 flex flex-col space-y-1">
+                            <input
+                                formControlName="name"
+                                placeholder="Name"
+                                class="min-w-0 bg-gray-200 p-1"
+                                [id]="'item@' + i"
+                                (keyup.enter)="addItem(i + 1)"
+                            />
+                            <input
+                                formControlName="category"
+                                placeholder="Category"
+                                class="min-w-0 bg-gray-200 p-1"
+                                (keyup.enter)="addItem(i + 1)"
+                            />
+                        </div>
+                        <div class="ml-auto">x</div>
+                        <input
+                            formControlName="quantity"
+                            placeholder="qty"
+                            class="mx-1 w-8 bg-gray-200 p-1"
+                            (keyup.enter)="addItem(i + 1)"
+                        />
+                        <input
+                            formControlName="unit"
+                            placeholder="Unit"
+                            class="min-w-0 bg-gray-200 p-1"
+                            (keyup.enter)="addItem(i + 1)"
+                        />
+                    </div>
+                </div>
+
+                <!-- Add Item Button -->
+                <button
+                    (click)="addItem()"
+                    class="ml-auto mt-1 flex h-8 w-8 items-center justify-center rounded-md bg-gray-300"
+                    type="button"
+                >
+                    <i class="gg-math-plus"></i>
+                </button>
+            </div>
+
+            <!-- Instructions -->
+            <div>
+                <label class="mb-1 text-xl" for="instructions">Instructions</label>
+                <div class="grow-wrap">
+                    <textarea
+                        formControlName="instructions"
+                        id="instructions"
+                        class="h-full w-full resize-none bg-gray-100 p-2 dark:bg-gray-800"
+                        onInput="this.parentNode.dataset.replicatedValue = this.value"
+                    ></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { TopbarComponent } from '../navigation/topbar/topbar.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-recipes-page',
     standalone: true,
-    imports: [TopbarComponent],
+    imports: [RouterModule, TopbarComponent],
     templateUrl: './recipes-page.component.html',
 })
 export class RecipesPageComponent {
@@ -15,25 +16,25 @@ export class RecipesPageComponent {
         items: [
             {
                 name: 'Bratwurst',
-                quantity: '1',
+                quantity: 1,
                 unit: 'lb',
                 category: 'Meat',
             },
             {
                 name: 'Onion',
-                quantity: '1',
+                quantity: 1,
                 unit: '',
                 category: 'Meat',
             },
             {
                 name: 'Butter',
-                quantity: '4',
+                quantity: 4,
                 unit: 'tbsp',
                 category: 'Dairy',
             },
             {
                 name: 'Beers',
-                quantity: '2',
+                quantity: 2,
                 unit: '',
                 category: 'Alcohol',
             },
