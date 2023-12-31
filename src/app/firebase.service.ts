@@ -1,5 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import {
+    type CollectionReference,
+    Firestore,
+    collection,
+    collectionData,
+    addDoc,
+} from '@angular/fire/firestore';
 import { type Observable } from 'rxjs';
 
 import { type Recipe } from './recipe';
@@ -12,6 +18,10 @@ export class FirebaseService {
 
     userId = '';
 
+    get recipesCollection(): CollectionReference {
+        return collection(this.firestore, `users/${this.userId}/recipes`);
+    }
+
     constructor() {
         const id = localStorage.getItem('userId');
         if (id !== null) {
@@ -20,8 +30,10 @@ export class FirebaseService {
     }
 
     getRecipes(): Observable<Recipe[]> {
-        const aCollection = collection(this.firestore, `users/${this.userId}/recipes`);
+        return collectionData(this.recipesCollection) as Observable<Recipe[]>;
+    }
 
-        return collectionData(aCollection) as Observable<Recipe[]>;
+    async addRecipe(recipe: Recipe): Promise<void> {
+        await addDoc(this.recipesCollection, recipe);
     }
 }

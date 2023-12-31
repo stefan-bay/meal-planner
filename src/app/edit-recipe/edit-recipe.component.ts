@@ -1,7 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { type FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { TopbarComponent } from '../navigation/topbar/topbar.component';
+import { FirebaseService } from '../firebase.service';
+import { type Recipe } from '../recipe';
 
 @Component({
     selector: 'app-edit-recipe',
@@ -11,6 +14,7 @@ import { TopbarComponent } from '../navigation/topbar/topbar.component';
 })
 export class EditRecipeComponent {
     formBuiler = inject(FormBuilder);
+    firebaseService = inject(FirebaseService);
 
     recipeForm = this.formBuiler.group({
         name: ['', Validators.required],
@@ -42,8 +46,13 @@ export class EditRecipeComponent {
         this.items.removeAt(itemIndex);
     }
 
-    saveClicked(): void {
-        console.log(this.recipeForm);
+    async saveClicked(): Promise<void> {
+        if (this.recipeForm.invalid) {
+            return;
+        }
+        const recipe = this.recipeForm.value as Recipe;
+
+        await this.firebaseService.addRecipe(recipe);
     }
 
     focusId(id: number): void {
