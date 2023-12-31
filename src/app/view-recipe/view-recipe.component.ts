@@ -27,6 +27,9 @@ export class ViewRecipeComponent {
         this.linkRecipe();
     }
 
+    /**
+     * Automatically update recipe when it changes
+     */
     linkRecipe(): void {
         const recipeRef = this.firebaseService.getRecipe(this.id);
 
