@@ -4,4 +4,5 @@ export interface Recipe {
     name: string;
     instructions: string;
     items: RecipeItem[];
+    id?: string;
 }

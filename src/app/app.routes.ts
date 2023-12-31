@@ -9,11 +9,11 @@ export const routes: Routes = [
         component: RecipesPageComponent,
     },
     {
-        path: 'recipe/new',
+        path: 'recipes/new',
         component: EditRecipeComponent,
     },
     {
-        path: 'recipe/:id',
+        path: 'recipes/:id',
         component: ViewRecipeComponent,
     },
 ];
