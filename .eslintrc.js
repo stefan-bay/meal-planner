@@ -24,6 +24,7 @@ module.exports = {
         '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
         '@typescript-eslint/unbound-method': ['off'],
         '@typescript-eslint/member-ordering': 'error',
+        '@typescript-eslint/strict-boolean-expressions': 'off',
         quotes: ['error', 'single'],
     },
 };
