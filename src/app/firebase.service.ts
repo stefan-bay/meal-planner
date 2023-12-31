@@ -1,12 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import {
     type CollectionReference,
+    type DocumentReference,
     Firestore,
     collection,
     collectionData,
     doc,
     addDoc,
-    type DocumentReference,
+    setDoc,
 } from '@angular/fire/firestore';
 import { type Observable } from 'rxjs';
 
@@ -45,5 +46,9 @@ export class FirebaseService {
 
     async addRecipe(recipe: Recipe): Promise<void> {
         await addDoc(this.recipesCollection, recipe);
+    }
+
+    async updateRecipe(id: string, recipe: Recipe): Promise<void> {
+        await setDoc(this.getRecipe(id), recipe);
     }
 }

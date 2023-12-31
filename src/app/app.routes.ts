@@ -16,4 +16,8 @@ export const routes: Routes = [
         path: 'recipes/:id',
         component: ViewRecipeComponent,
     },
+    {
+        path: 'recipes/:id/edit',
+        component: EditRecipeComponent,
+    },
 ];

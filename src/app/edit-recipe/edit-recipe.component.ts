@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { type OnInit, Component, Input, inject } from '@angular/core';
 import { NgFor } from '@angular/common';
-import { type FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { getDoc } from '@angular/fire/firestore';
 
 import { TopbarComponent } from '../navigation/topbar/topbar.component';
 import { FirebaseService } from '../firebase.service';
 import { type Recipe } from '../recipe';
+import { type RecipeItem } from '../recipe-item';
 
 @Component({
     selector: 'app-edit-recipe',
@@ -12,18 +14,38 @@ import { type Recipe } from '../recipe';
     imports: [TopbarComponent, ReactiveFormsModule, NgFor],
     templateUrl: './edit-recipe.component.html',
 })
-export class EditRecipeComponent {
+export class EditRecipeComponent implements OnInit {
     formBuiler = inject(FormBuilder);
     firebaseService = inject(FirebaseService);
 
-    recipeForm = this.formBuiler.group({
+    recipeForm: FormGroup = this.formBuiler.group({
         name: ['', Validators.required],
         instructions: [''],
         items: this.formBuiler.array([]),
     });
 
+    private _id = '';
+
     get items(): FormArray {
-        return this.recipeForm.controls.items as FormArray;
+        return this.recipeForm.controls['items'] as FormArray;
+    }
+
+    get id(): string {
+        return this._id;
+    }
+
+    @Input()
+    set id(recipeId: string) {
+        this._id = recipeId;
+    }
+
+    async ngOnInit(): Promise<void> {
+        if (this.id === undefined) {
+            return;
+        }
+
+        const recipe = await this.getRecipe();
+        this.initForm(recipe);
     }
 
     addItem(index = -1): void {
@@ -52,14 +74,40 @@ export class EditRecipeComponent {
         }
         const recipe = this.recipeForm.value as Recipe;
 
-        await this.firebaseService.addRecipe(recipe);
+        if (this.id === '') {
+            await this.firebaseService.addRecipe(recipe);
+            return;
+        }
+
+        await this.firebaseService.updateRecipe(this.id, recipe);
     }
 
-    focusId(id: number): void {
-        const el = document.getElementById(`item@${id}`);
-        console.log(el);
-        if (el !== null) {
-            el.focus();
-        }
+    private initForm(recipe: Recipe): void {
+        const itemFormBuilder = (item: RecipeItem): FormGroup => {
+            return this.formBuiler.group({
+                name: [item.name, Validators.required],
+                quantity: [item.quantity, Validators.required],
+                unit: [item.unit || ''],
+                category: [item.category || ''],
+            });
+        };
+
+        const itemForms = recipe.items.map(itemFormBuilder);
+
+        this.recipeForm = this.formBuiler.group({
+            name: [recipe.name, Validators.required],
+            instructions: [recipe.instructions],
+            items: this.formBuiler.array(itemForms),
+        });
+    }
+
+    /**
+     * Get recipe only once
+     */
+    private async getRecipe(): Promise<Recipe> {
+        const recipeRef = this.firebaseService.getRecipe(this.id);
+        const recipe = (await getDoc(recipeRef)).data() as Recipe;
+
+        return recipe;
     }
 }
