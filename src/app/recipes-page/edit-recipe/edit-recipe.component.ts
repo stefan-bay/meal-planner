@@ -3,10 +3,10 @@ import { NgFor } from '@angular/common';
 import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { getDoc } from '@angular/fire/firestore';
 
-import { TopbarComponent } from '../navigation/topbar/topbar.component';
-import { FirebaseService } from '../firebase.service';
-import { type Recipe } from '../recipe';
-import { type RecipeItem } from '../recipe-item';
+import { TopbarComponent } from '../../navigation/topbar/topbar.component';
+import { FirebaseService } from '../../services/firebase.service';
+import { type Recipe } from '../../interfaces/recipe';
+import { type RecipeItem } from '../../interfaces/recipe-item';
 
 @Component({
     selector: 'app-edit-recipe',

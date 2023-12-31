@@ -1,7 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
-import { type Recipe } from '../recipe';
-import { TopbarComponent } from '../navigation/topbar/topbar.component';
-import { FirebaseService } from '../firebase.service';
+import { type Recipe } from '../../interfaces/recipe';
+import { TopbarComponent } from '../../navigation/topbar/topbar.component';
+import { FirebaseService } from '../../services/firebase.service';
 import { onSnapshot } from '@angular/fire/firestore';
 
 @Component({

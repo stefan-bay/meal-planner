@@ -1,12 +1,12 @@
 import { type Routes } from '@angular/router';
-import { RecipesPageComponent } from './recipes-page/recipes-page.component';
-import { ViewRecipeComponent } from './view-recipe/view-recipe.component';
-import { EditRecipeComponent } from './edit-recipe/edit-recipe.component';
+import { ListRecipesComponent } from './recipes-page/list-recipes/list-recipes.component';
+import { ViewRecipeComponent } from './recipes-page/view-recipe/view-recipe.component';
+import { EditRecipeComponent } from './recipes-page/edit-recipe/edit-recipe.component';
 
 export const routes: Routes = [
     {
         path: 'recipes',
-        component: RecipesPageComponent,
+        component: ListRecipesComponent,
     },
     {
         path: 'recipes/new',
