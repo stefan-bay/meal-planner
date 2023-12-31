@@ -16,14 +16,14 @@ export class ViewRecipeComponent {
 
     private _id = '';
 
+    get id(): string {
+        return this._id;
+    }
+
     @Input()
     set id(recipeId: string) {
         this._id = recipeId;
         void this.fetchRecipe();
-    }
-
-    get id(): string {
-        return this._id;
     }
 
     async fetchRecipe(): Promise<void> {

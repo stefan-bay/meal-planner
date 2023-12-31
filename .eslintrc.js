@@ -23,6 +23,7 @@ module.exports = {
         '@typescript-eslint/semi': ['error', 'always'],
         '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
         '@typescript-eslint/unbound-method': ['off'],
+        '@typescript-eslint/member-ordering': 'error',
         quotes: ['error', 'single'],
     },
 };

@@ -21,19 +21,19 @@ export class FirebaseService {
 
     userId = '';
 
+    constructor() {
+        const id = localStorage.getItem('userId');
+        if (id !== null) {
+            this.userId = id;
+        }
+    }
+
     get recipesPath(): string {
         return `users/${this.userId}/recipes`;
     }
 
     get recipesCollection(): CollectionReference {
         return collection(this.firestore, this.recipesPath);
-    }
-
-    constructor() {
-        const id = localStorage.getItem('userId');
-        if (id !== null) {
-            this.userId = id;
-        }
     }
 
     getRecipes(): Observable<Recipe[]> {
