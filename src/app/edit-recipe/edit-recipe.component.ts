@@ -29,7 +29,6 @@ export class EditRecipeComponent {
             unit: [''],
             category: [''],
         });
-        console.log('index', index);
 
         if (index >= 0) {
             this.items.insert(index, itemForm);

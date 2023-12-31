@@ -1,19 +1,20 @@
-<app-topbar>
-    <b class="text-xl">New Recipe</b>
-    <button
-        class="backgrou ml-auto flex w-24 items-baseline justify-center rounded-md py-2 transition-all hover:bg-gray-300"
-        type="button"
-        (click)="saveClicked()"
-    >
-        <div class="mr-3 mt-2">
-            <i class="gg-cloud"></i>
-        </div>
-        Save
-    </button>
-</app-topbar>
+<form (ngSubmit)="saveClicked()" [formGroup]="recipeForm">
+    <!-- Top Bar -->
+    <app-topbar>
+        <b class="text-xl">New Recipe</b>
+        <button
+            class="ml-auto flex w-24 items-baseline justify-center rounded-md py-2 transition-all hover:bg-gray-300"
+            type="submit"
+        >
+            <div class="mr-3 mt-2">
+                <i class="gg-cloud"></i>
+            </div>
+            Save
+        </button>
+    </app-topbar>
 
-<div class="h-auto w-full p-4 dark:bg-gray-700 dark:text-gray-200">
-    <form [formGroup]="recipeForm">
+    <!-- Content -->
+    <div class="h-auto w-full p-4 dark:bg-gray-700 dark:text-gray-200">
         <!-- Title -->
         <div class="flex flex-row items-center">
             <label class="text-xl" for="name">Title: </label>
@@ -21,6 +22,7 @@
                 formControlName="name"
                 class="ml-2 w-full flex-1 bg-gray-200 p-2 dark:bg-gray-800"
                 (keyup.enter)="addItem()"
+                required
             />
         </div>
 
@@ -93,5 +95,5 @@
                 ></textarea>
             </div>
         </div>
-    </form>
-</div>
+    </div>
+</form>
