@@ -7,7 +7,6 @@ import {
     doc,
     addDoc,
     type DocumentReference,
-    getDoc,
 } from '@angular/fire/firestore';
 import { type Observable } from 'rxjs';
 
@@ -40,11 +39,8 @@ export class FirebaseService {
         return collectionData(this.recipesCollection, { idField: 'id' }) as Observable<Recipe[]>;
     }
 
-    async getRecipe(id: string): Promise<Recipe> {
-        const docRef: DocumentReference = doc(this.firestore, this.recipesPath + `/${id}`);
-        const d = await getDoc(docRef);
-
-        return d.data() as Recipe;
+    getRecipe(id: string): DocumentReference {
+        return doc(this.firestore, this.recipesPath + `/${id}`);
     }
 
     async addRecipe(recipe: Recipe): Promise<void> {

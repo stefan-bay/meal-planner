@@ -2,6 +2,7 @@ import { Component, Input, inject } from '@angular/core';
 import { type Recipe } from '../recipe';
 import { TopbarComponent } from '../navigation/topbar/topbar.component';
 import { FirebaseService } from '../firebase.service';
+import { onSnapshot } from '@angular/fire/firestore';
 
 @Component({
     selector: 'app-view-recipe',
@@ -23,11 +24,14 @@ export class ViewRecipeComponent {
     @Input()
     set id(recipeId: string) {
         this._id = recipeId;
-        void this.fetchRecipe();
+        this.linkRecipe();
     }
 
-    async fetchRecipe(): Promise<void> {
-        const recipe = await this.firebaseService.getRecipe(this.id);
-        this.recipe = recipe;
+    linkRecipe(): void {
+        const recipeRef = this.firebaseService.getRecipe(this.id);
+
+        onSnapshot(recipeRef, (snapshot) => {
+            this.recipe = snapshot.data() as Recipe;
+        });
     }
 }
