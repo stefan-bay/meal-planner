@@ -1,11 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { type Observable } from 'rxjs';
 import { SidebarIconComponent } from './navigation/sidebar-icon/sidebar-icon.component';
 
-const userId = 'vi9c6IYy65nw3I8Bo2bJ';
+const USER_ID = 'vi9c6IYy65nw3I8Bo2bJ';
 
 @Component({
     selector: 'app-root',
@@ -14,10 +12,7 @@ const userId = 'vi9c6IYy65nw3I8Bo2bJ';
     templateUrl: './app.component.html',
 })
 export class AppComponent {
-    // firestore: Firestore = inject(Firestore);
-    // items$: Observable<any[]>;
-    // constructor() {
-    // const aCollection = collection(this.firestore, `users/${userId}/recipes`);
-    // this.items$ = collectionData(aCollection);
-    // }
+    constructor() {
+        localStorage.setItem('userId', USER_ID);
+    }
 }
