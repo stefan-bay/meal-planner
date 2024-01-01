@@ -1,7 +1,7 @@
 <ng-container *ngIf="recipe$ | async as recipe">
     <app-topbar>
         <div class="text-xl">
-            <b>{{ recipe?.name }}</b>
+            <b>{{ recipe.name }}</b>
         </div>
 
         <a
@@ -20,8 +20,8 @@
             <!-- Ingredients -->
             <div class="text-left text-xl">Ingredients</div>
             <div class="md:max-h-1/4 mt-2 flex flex-col flex-wrap">
-                @for (item of recipe?.items; track $index) {
-                    <div class="flex flex-row items-baseline md:w-1/4">
+                @if (recipe.items && recipe.items.length > 0) {
+                    <div *ngFor="let item of recipe?.items" class="flex flex-row items-baseline md:w-1/4">
                         <div>
                             {{ '▷ ' + item.name }}
                         </div>
@@ -31,6 +31,8 @@
                             {{ item.unit }}
                         </div>
                     </div>
+                } @else {
+                    <i>No ingredients</i>
                 }
             </div>
 
@@ -39,7 +41,11 @@
 
             <!-- Instructions -->
             <div class="mt-2 text-left text-xl">Instructions</div>
-            <div>{{ recipe?.instructions }}</div>
+            @if (recipe.instructions) {
+                <div>{{ recipe.instructions }}</div>
+            } @else {
+                <i>No instructions</i>
+            }
         </div>
     </div>
 </ng-container>
