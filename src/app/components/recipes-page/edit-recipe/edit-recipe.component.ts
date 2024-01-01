@@ -106,5 +106,11 @@ export class EditRecipeComponent {
             instructions: [recipe.instructions],
             items: this.formBuiler.array(itemForms),
         });
+
+        // Automatically resize instructions text-area after loading
+        const instructionsEl = document.getElementById('instructions');
+        if (instructionsEl) {
+            (instructionsEl.parentNode as HTMLElement).dataset['replicatedValue'] = recipe.instructions;
+        }
     }
 }
