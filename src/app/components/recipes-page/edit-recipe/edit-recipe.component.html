@@ -28,13 +28,13 @@
     </app-topbar>
 
     <!-- Content -->
-    <div class="h-auto w-full p-4 dark:bg-gray-700 dark:text-gray-200">
+    <div class="h-auto w-full p-4">
         <!-- Title -->
         <div class="flex flex-row items-center">
             <label class="text-xl" for="name">Title: </label>
             <input
                 formControlName="name"
-                class="ml-2 w-full flex-1 bg-gray-200 p-2 dark:bg-gray-800"
+                class="ml-2 w-full flex-1 bg-gray-200 p-2"
                 (keyup.enter)="addItem()"
                 required
             />
@@ -104,7 +104,7 @@
                 <textarea
                     formControlName="instructions"
                     id="instructions"
-                    class="h-full w-full resize-none bg-gray-100 p-2 dark:bg-gray-800"
+                    class="h-full w-full resize-none bg-gray-100 p-2"
                     onInput="this.parentNode.dataset.replicatedValue = this.value"
                 ></textarea>
             </div>
