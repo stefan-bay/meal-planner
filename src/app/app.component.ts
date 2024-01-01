@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { SidebarIconComponent } from './navigation/sidebar-icon/sidebar-icon.component';
+import { SidebarIconComponent } from './components/navigation/sidebar-icon/sidebar-icon.component';
 
 const USER_ID = 'vi9c6IYy65nw3I8Bo2bJ';
 

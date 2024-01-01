@@ -4,9 +4,9 @@ import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Valid
 import { type Observable, take } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
-import { FirebaseService } from '../../services/firebase.service';
-import { type Recipe } from '../../interfaces/recipe';
-import { type RecipeItem } from '../../interfaces/recipe-item';
+import { FirebaseService } from '../../../services/firebase.service';
+import { type Recipe } from '../../../interfaces/recipe';
+import { type RecipeItem } from '../../../interfaces/recipe-item';
 
 @Component({
     selector: 'app-edit-recipe',

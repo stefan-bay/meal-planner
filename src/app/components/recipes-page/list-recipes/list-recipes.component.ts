@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
 import { type Observable } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
-import { FirebaseService } from '../../services/firebase.service';
-import { type Recipe } from '../../interfaces/recipe';
+import { FirebaseService } from '../../../services/firebase.service';
+import { type Recipe } from '../../../interfaces/recipe';
 
 @Component({
     selector: 'app-list-recipes',

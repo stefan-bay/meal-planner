@@ -2,9 +2,9 @@ import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { type Observable } from 'rxjs';
 
-import { type Recipe } from '../../interfaces/recipe';
+import { type Recipe } from '../../../interfaces/recipe';
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
-import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseService } from '../../../services/firebase.service';
 
 @Component({
     selector: 'app-view-recipe',
