@@ -3,6 +3,16 @@
         <div class="text-xl">
             <b>{{ recipe?.name }}</b>
         </div>
+
+        <a
+            class="ml-auto flex w-24 items-center justify-center rounded-md py-2 transition-all hover:bg-gray-300"
+            routerLink="edit"
+        >
+            <div class="mr-3">
+                <i class="gg-pen"></i>
+            </div>
+            Edit
+        </a>
     </app-topbar>
 
     <div class="h-[calc(100vh-3rem)] w-full dark:bg-gray-700 dark:text-gray-200">

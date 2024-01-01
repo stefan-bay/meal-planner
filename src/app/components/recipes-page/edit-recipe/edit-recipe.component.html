@@ -1,7 +1,13 @@
 <form (ngSubmit)="saveClicked()" [formGroup]="recipeForm">
     <!-- Top Bar -->
     <app-topbar>
-        <b class="text-xl">New Recipe</b>
+        <b class="text-xl">
+            @if (id === 'new') {
+                New Recipe
+            } @else {
+                Edit Recipe
+            }
+        </b>
         <button
             class="ml-auto flex w-24 items-baseline justify-center rounded-md py-2 transition-all hover:bg-gray-300"
             type="submit"

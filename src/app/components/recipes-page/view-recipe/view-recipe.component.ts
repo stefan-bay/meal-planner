@@ -1,5 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { type Observable } from 'rxjs';
 
 import { type Recipe } from '../../../interfaces/recipe';
@@ -9,7 +10,7 @@ import { FirebaseService } from '../../../services/firebase.service';
 @Component({
     selector: 'app-view-recipe',
     standalone: true,
-    imports: [TopbarComponent, CommonModule],
+    imports: [TopbarComponent, RouterModule, CommonModule],
     templateUrl: './view-recipe.component.html',
 })
 export class ViewRecipeComponent {
