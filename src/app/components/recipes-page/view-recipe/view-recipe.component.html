@@ -1,0 +1,59 @@
+<ng-container *ngIf="recipe$ | async as recipe; else loadingRef">
+    <app-topbar>
+        <div class="text-xl">
+            <b>{{ recipe.name }}</b>
+        </div>
+
+        <a
+            class="ml-auto flex w-24 items-center justify-center rounded-md py-2 transition-all hover:bg-gray-300"
+            routerLink="edit"
+        >
+            <div class="mr-3">
+                <i class="gg-pen"></i>
+            </div>
+            Edit
+        </a>
+    </app-topbar>
+
+    <div class="w-full">
+        <div class="h-full w-full p-4">
+            <!-- Ingredients -->
+            <div class="text-left text-xl">Ingredients</div>
+            <div class="md:max-h-1/4 mt-2 flex flex-col flex-wrap">
+                @if (recipe.items && recipe.items.length > 0) {
+                    <div *ngFor="let item of recipe?.items" class="flex flex-row items-baseline md:w-1/4">
+                        <div>
+                            {{ '▷ ' + item.name }}
+                        </div>
+                        <div class="flex-1 border-t-2 border-dashed"></div>
+                        <div class="">
+                            {{ item.quantity }}
+                            {{ item.unit }}
+                        </div>
+                    </div>
+                } @else {
+                    <i>No ingredients</i>
+                }
+            </div>
+
+            <!-- Divider -->
+            <div class="mt-3 h-1 w-full border-t-2 border-double border-gray-300"></div>
+
+            <!-- Instructions -->
+            <div class="mt-2 text-left text-xl">Instructions</div>
+            @if (recipe.instructions) {
+                <div>{{ recipe.instructions }}</div>
+            } @else {
+                <i>No instructions</i>
+            }
+        </div>
+    </div>
+</ng-container>
+
+<!-- Loading -->
+<ng-template #loadingRef>
+    <app-topbar></app-topbar>
+    <div class="mt-2 flex w-full justify-center">
+        <i class="gg-spinner"></i>
+    </div>
+</ng-template>
