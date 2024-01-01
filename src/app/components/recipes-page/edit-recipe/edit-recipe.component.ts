@@ -1,5 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { NgFor } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { type Observable, take } from 'rxjs';
 
@@ -15,6 +16,8 @@ import { type RecipeItem } from '../../../interfaces/recipe-item';
     templateUrl: './edit-recipe.component.html',
 })
 export class EditRecipeComponent {
+    route = inject(ActivatedRoute);
+    router = inject(Router);
     formBuiler = inject(FormBuilder);
     firebaseService = inject(FirebaseService);
 
@@ -79,10 +82,11 @@ export class EditRecipeComponent {
 
         if (this.id === '') {
             await this.firebaseService.addRecipe(recipe);
-            return;
+        } else {
+            await this.firebaseService.updateRecipe(this.id, recipe);
         }
 
-        await this.firebaseService.updateRecipe(this.id, recipe);
+        await this.router.navigate(['../'], { relativeTo: this.route });
     }
 
     private initForm(recipe: Recipe): void {
