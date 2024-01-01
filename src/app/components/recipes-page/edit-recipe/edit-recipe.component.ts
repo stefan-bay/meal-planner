@@ -1,5 +1,5 @@
 import { Component, Input, inject } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { type Observable, take } from 'rxjs';
@@ -12,7 +12,7 @@ import { type RecipeItem } from '../../../interfaces/recipe-item';
 @Component({
     selector: 'app-edit-recipe',
     standalone: true,
-    imports: [TopbarComponent, ReactiveFormsModule, NgFor],
+    imports: [TopbarComponent, ReactiveFormsModule, CommonModule],
     templateUrl: './edit-recipe.component.html',
 })
 export class EditRecipeComponent {
@@ -20,6 +20,8 @@ export class EditRecipeComponent {
     router = inject(Router);
     formBuiler = inject(FormBuilder);
     firebaseService = inject(FirebaseService);
+
+    loading = false;
 
     recipeForm: FormGroup = this.formBuiler.group({
         name: ['', Validators.required],
@@ -80,6 +82,8 @@ export class EditRecipeComponent {
         }
         const recipe = this.recipeForm.value as Recipe;
 
+        this.loading = true;
+
         if (this.id === '') {
             await this.firebaseService.addRecipe(recipe);
         } else {
@@ -87,6 +91,8 @@ export class EditRecipeComponent {
         }
 
         await this.router.navigate(['../'], { relativeTo: this.route });
+
+        this.loading = false;
     }
 
     private initForm(recipe: Recipe): void {

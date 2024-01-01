@@ -9,36 +9,45 @@
 </app-topbar>
 
 <div class="h-auto space-y-4 px-3 pt-3 dark:bg-gray-700">
-    <a
-        *ngFor="let recipe of recipes$ | async"
-        class="block w-full rounded-md bg-gray-200 p-2 text-left shadow-lg dark:bg-neutral-600 dark:text-gray-400"
-        [routerLink]="recipe.id"
-    >
-        <b class="dark:text-gray-300">{{ recipe.name }}</b>
+    <ng-container *ngIf="recipes$ | async as recipes; else loadingRef">
+        <a
+            *ngFor="let recipe of recipes"
+            class="block w-full rounded-md bg-gray-200 p-2 text-left shadow-lg dark:bg-neutral-600 dark:text-gray-400"
+            [routerLink]="recipe.id"
+        >
+            <b class="dark:text-gray-300">{{ recipe.name }}</b>
 
-        <!-- Ingredients -->
-        <div class="flex flex-wrap">
-            @for (ingredient of recipe.items; track $index) {
-                <div class="mr-2 flex flex-row">
-                    <div class="text-blue-700 dark:text-blue-500">
-                        {{ ingredient.quantity }}
+            <!-- Ingredients -->
+            <div class="flex flex-wrap">
+                @for (ingredient of recipe.items; track $index) {
+                    <div class="mr-2 flex flex-row">
+                        <div class="text-blue-700 dark:text-blue-500">
+                            {{ ingredient.quantity }}
+                        </div>
+                        <div class="mr-1 text-gray-500 dark:text-gray-400">
+                            {{ ingredient.unit }}
+                        </div>
+                        <div>
+                            {{ ingredient.name }}
+                        </div>
                     </div>
-                    <div class="mr-1 text-gray-500 dark:text-gray-400">
-                        {{ ingredient.unit }}
-                    </div>
-                    <div>
-                        {{ ingredient.name }}
-                    </div>
-                </div>
-            }
-        </div>
-        <!-- Instructions -->
-        <div class="mt-2">
-            <i>
-                {{ recipe.instructions }}
-            </i>
-        </div>
-    </a>
+                }
+            </div>
+            <!-- Instructions -->
+            <div class="mt-2">
+                <i>
+                    {{ recipe.instructions }}
+                </i>
+            </div>
+        </a>
+    </ng-container>
     <!-- Spacer -->
     <div class="h-4"></div>
 </div>
+
+<!-- Loading -->
+<ng-template #loadingRef>
+    <div class="flex w-full justify-center">
+        <i class="gg-spinner"></i>
+    </div>
+</ng-template>

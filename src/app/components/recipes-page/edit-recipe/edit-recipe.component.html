@@ -9,13 +9,22 @@
             }
         </b>
         <button
-            class="ml-auto flex w-24 items-baseline justify-center rounded-md py-2 transition-all hover:bg-gray-300"
+            class="ml-auto flex w-24 items-center justify-center rounded-md py-2 transition-all hover:bg-gray-300"
             type="submit"
+            [disabled]="loading"
         >
-            <div class="mr-3 mt-2">
-                <i class="gg-cloud"></i>
-            </div>
-            Save
+            <ng-container *ngIf="!loading">
+                <div class="mr-3 mt-3">
+                    <i class="gg-cloud"></i>
+                </div>
+                Save
+            </ng-container>
+            <ng-container *ngIf="loading">
+                <div class="mr-1">
+                    <i class="gg-spinner"></i>
+                </div>
+                Saving
+            </ng-container>
         </button>
     </app-topbar>
 
