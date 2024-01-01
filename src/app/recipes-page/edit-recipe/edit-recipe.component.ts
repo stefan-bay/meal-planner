@@ -1,7 +1,7 @@
-import { type OnInit, Component, Input, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { getDoc } from '@angular/fire/firestore';
+import { type Observable, take } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirebaseService } from '../../services/firebase.service';
@@ -14,7 +14,7 @@ import { type RecipeItem } from '../../interfaces/recipe-item';
     imports: [TopbarComponent, ReactiveFormsModule, NgFor],
     templateUrl: './edit-recipe.component.html',
 })
-export class EditRecipeComponent implements OnInit {
+export class EditRecipeComponent {
     formBuiler = inject(FormBuilder);
     firebaseService = inject(FirebaseService);
 
@@ -23,6 +23,8 @@ export class EditRecipeComponent implements OnInit {
         instructions: [''],
         items: this.formBuiler.array([]),
     });
+
+    private recipe$: Observable<Recipe> | null = null;
 
     private _id = '';
 
@@ -37,15 +39,16 @@ export class EditRecipeComponent implements OnInit {
     @Input()
     set id(recipeId: string) {
         this._id = recipeId;
-    }
-
-    async ngOnInit(): Promise<void> {
-        if (this.id === undefined) {
+        if (this.id === 'new') {
             return;
         }
 
-        const recipe = await this.getRecipe();
-        this.initForm(recipe);
+        this.recipe$ = this.firebaseService.getRecipe(this.id).pipe(take(1));
+        this.recipe$.subscribe({
+            next: (recipe) => {
+                this.initForm(recipe);
+            },
+        });
     }
 
     addItem(index = -1): void {
@@ -99,15 +102,5 @@ export class EditRecipeComponent implements OnInit {
             instructions: [recipe.instructions],
             items: this.formBuiler.array(itemForms),
         });
-    }
-
-    /**
-     * Get recipe only once
-     */
-    private async getRecipe(): Promise<Recipe> {
-        const recipeRef = this.firebaseService.getRecipe(this.id);
-        const recipe = (await getDoc(recipeRef)).data() as Recipe;
-
-        return recipe;
     }
 }

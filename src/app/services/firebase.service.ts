@@ -4,8 +4,9 @@ import {
     type DocumentReference,
     Firestore,
     collection,
-    collectionData,
     doc,
+    collectionData,
+    docData,
     addDoc,
     setDoc,
 } from '@angular/fire/firestore';
@@ -23,32 +24,38 @@ export class FirebaseService {
 
     constructor() {
         const id = localStorage.getItem('userId');
-        if (id !== null) {
-            this.userId = id;
+        if (id === null) {
+            return;
         }
+
+        this.userId = id;
     }
 
-    get recipesPath(): string {
+    private get recipesPath(): string {
         return `users/${this.userId}/recipes`;
     }
 
-    get recipesCollection(): CollectionReference {
-        return collection(this.firestore, this.recipesPath);
-    }
-
     getRecipes(): Observable<Recipe[]> {
-        return collectionData(this.recipesCollection, { idField: 'id' }) as Observable<Recipe[]>;
+        return collectionData(this.getRecipesCollectionRef(), { idField: 'id' }) as Observable<Recipe[]>;
     }
 
-    getRecipe(id: string): DocumentReference {
-        return doc(this.firestore, this.recipesPath + `/${id}`);
+    getRecipe(id: string): Observable<Recipe> {
+        return docData(this.getRecipeDocumentRef(id)) as Observable<Recipe>;
     }
 
     async addRecipe(recipe: Recipe): Promise<void> {
-        await addDoc(this.recipesCollection, recipe);
+        await addDoc(this.getRecipesCollectionRef(), recipe);
     }
 
     async updateRecipe(id: string, recipe: Recipe): Promise<void> {
-        await setDoc(this.getRecipe(id), recipe);
+        await setDoc(this.getRecipeDocumentRef(id), recipe);
+    }
+
+    private getRecipesCollectionRef(): CollectionReference {
+        return collection(this.firestore, this.recipesPath);
+    }
+
+    private getRecipeDocumentRef(id: string): DocumentReference {
+        return doc(this.firestore, this.recipesPath, id);
     }
 }
