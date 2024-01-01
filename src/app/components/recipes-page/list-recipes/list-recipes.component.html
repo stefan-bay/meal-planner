@@ -19,19 +19,17 @@
 
             <!-- Ingredients -->
             <div class="flex flex-wrap">
-                @for (ingredient of recipe.items; track $index) {
-                    <div class="mr-2 flex flex-row">
-                        <div class="text-blue-700 dark:text-blue-500">
-                            {{ ingredient.quantity }}
-                        </div>
-                        <div class="mr-1 text-gray-500 dark:text-gray-400">
-                            {{ ingredient.unit }}
-                        </div>
-                        <div>
-                            {{ ingredient.name }}
-                        </div>
+                <div *ngFor="let ingredient of recipe.items" class="mr-2 flex flex-row">
+                    <div class="text-blue-700 dark:text-blue-500">
+                        {{ ingredient.quantity }}
                     </div>
-                }
+                    <div class="mr-1 text-gray-500 dark:text-gray-400">
+                        {{ ingredient.unit }}
+                    </div>
+                    <div>
+                        {{ ingredient.name }}
+                    </div>
+                </div>
             </div>
             <!-- Instructions -->
             <div class="mt-2">

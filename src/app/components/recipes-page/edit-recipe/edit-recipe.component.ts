@@ -1,5 +1,5 @@
 import { Component, Input, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { type Observable, take } from 'rxjs';
@@ -12,7 +12,7 @@ import { type RecipeItem } from '../../../interfaces/recipe-item';
 @Component({
     selector: 'app-edit-recipe',
     standalone: true,
-    imports: [TopbarComponent, ReactiveFormsModule, CommonModule],
+    imports: [TopbarComponent, ReactiveFormsModule, NgFor],
     templateUrl: './edit-recipe.component.html',
 })
 export class EditRecipeComponent {

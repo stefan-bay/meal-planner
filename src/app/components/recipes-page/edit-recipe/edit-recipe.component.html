@@ -13,18 +13,17 @@
             type="submit"
             [disabled]="loading"
         >
-            <ng-container *ngIf="!loading">
-                <div class="mr-3 mt-3">
-                    <i class="gg-cloud"></i>
-                </div>
-                Save
-            </ng-container>
-            <ng-container *ngIf="loading">
+            @if (loading) {
                 <div class="mr-1">
                     <i class="gg-spinner"></i>
                 </div>
                 Saving
-            </ng-container>
+            } @else {
+                <div class="mr-3 mt-3">
+                    <i class="gg-cloud"></i>
+                </div>
+                Save
+            }
         </button>
     </app-topbar>
 
