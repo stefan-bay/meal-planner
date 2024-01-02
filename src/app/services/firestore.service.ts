@@ -17,7 +17,7 @@ import { type Recipe } from '../interfaces/recipe';
 @Injectable({
     providedIn: 'root',
 })
-export class FirebaseService {
+export class FirestoreService {
     firestore: Firestore = inject(Firestore);
 
     userId = '';

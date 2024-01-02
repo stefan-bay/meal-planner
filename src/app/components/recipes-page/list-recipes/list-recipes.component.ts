@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { type Observable } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
-import { FirebaseService } from '../../../services/firebase.service';
+import { FirestoreService } from '../../../services/firestore.service';
 import { type Recipe } from '../../../interfaces/recipe';
 
 @Component({
@@ -15,10 +15,10 @@ import { type Recipe } from '../../../interfaces/recipe';
     templateUrl: './list-recipes.component.html',
 })
 export class ListRecipesComponent {
-    firebaseService = inject(FirebaseService);
+    firestoreService = inject(FirestoreService);
     recipes$: Observable<Recipe[]>;
 
     constructor() {
-        this.recipes$ = this.firebaseService.getRecipes();
+        this.recipes$ = this.firestoreService.getRecipes();
     }
 }

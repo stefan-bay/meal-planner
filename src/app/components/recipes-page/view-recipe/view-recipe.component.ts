@@ -5,7 +5,7 @@ import { type Observable } from 'rxjs';
 
 import { type Recipe } from '../../../interfaces/recipe';
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
-import { FirebaseService } from '../../../services/firebase.service';
+import { FirestoreService } from '../../../services/firestore.service';
 
 @Component({
     selector: 'app-view-recipe',
@@ -14,7 +14,7 @@ import { FirebaseService } from '../../../services/firebase.service';
     templateUrl: './view-recipe.component.html',
 })
 export class ViewRecipeComponent {
-    firebaseService = inject(FirebaseService);
+    firestoreService = inject(FirestoreService);
 
     recipe$: Observable<Recipe> | null = null;
 
@@ -27,6 +27,6 @@ export class ViewRecipeComponent {
     @Input()
     set id(recipeId: string) {
         this._id = recipeId;
-        this.recipe$ = this.firebaseService.getRecipe(this.id);
+        this.recipe$ = this.firestoreService.getRecipe(this.id);
     }
 }
