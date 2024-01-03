@@ -12,7 +12,7 @@
     <ng-container *ngIf="recipes$ | async as recipes; else loadingRef">
         <a
             *ngFor="let recipe of recipes"
-            class="block w-full rounded-md bg-gray-200 p-2 text-left shadow-lg"
+            class="block w-full rounded-md bg-gray-200 p-2 text-left shadow-sm"
             [routerLink]="recipe.id"
         >
             <b>{{ recipe.name }}</b>
