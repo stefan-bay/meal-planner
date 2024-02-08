@@ -12,13 +12,10 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type Observable, defer, from } from 'rxjs';
 
+import { type AuthCredentials } from '../interfaces/auth-credentials';
+
 interface AuthState {
     user: User | undefined | null;
-}
-
-interface Credentials {
-    email: string;
-    password: string;
 }
 
 @Injectable({
@@ -44,7 +41,7 @@ export class AuthService {
         });
     }
 
-    login(credentials: Credentials): Observable<UserCredential> {
+    login(credentials: AuthCredentials): Observable<UserCredential> {
         return from(
             defer(() => signInWithEmailAndPassword(this.auth, credentials.email, credentials.password)),
         );
@@ -54,7 +51,7 @@ export class AuthService {
         await signOut(this.auth);
     }
 
-    createAccount(credentials: Credentials): Observable<UserCredential> {
+    createAccount(credentials: AuthCredentials): Observable<UserCredential> {
         return from(
             defer(() => createUserWithEmailAndPassword(this.auth, credentials.email, credentials.password)),
         );
