@@ -9,7 +9,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes, withComponentInputBinding()),
-        importProvidersFrom(
+        importProvidersFrom([
             provideFirebaseApp(() =>
                 initializeApp({
                     projectId: 'meal-planner-57314',
@@ -20,8 +20,8 @@ export const appConfig: ApplicationConfig = {
                     messagingSenderId: '737424009673',
                 }),
             ),
-        ),
-        importProvidersFrom(provideAuth(() => getAuth())),
-        importProvidersFrom(provideFirestore(() => getFirestore())),
+            provideAuth(() => getAuth()),
+            provideFirestore(() => getFirestore()),
+        ]),
     ],
 };

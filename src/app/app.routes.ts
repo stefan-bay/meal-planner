@@ -6,6 +6,7 @@ import { ListRecipesComponent } from './components/recipes-page/list-recipes/lis
 import { ViewRecipeComponent } from './components/recipes-page/view-recipe/view-recipe.component';
 import { EditRecipeComponent } from './components/recipes-page/edit-recipe/edit-recipe.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -23,18 +24,22 @@ export const routes: Routes = [
     },
     {
         path: 'recipes',
+        canActivate: [authGuard()],
         component: ListRecipesComponent,
     },
     {
         path: 'recipes/:id',
+        canActivate: [authGuard()],
         component: ViewRecipeComponent,
     },
     {
         path: 'recipes/:id/edit',
+        canActivate: [authGuard()],
         component: EditRecipeComponent,
     },
     {
         path: '**',
+        canActivate: [authGuard()],
         component: PageNotFoundComponent,
     },
 ];
