@@ -25,6 +25,8 @@ module.exports = {
         '@typescript-eslint/unbound-method': ['off'],
         '@typescript-eslint/member-ordering': 'error',
         '@typescript-eslint/strict-boolean-expressions': 'off',
+        '@typescript-eslint/promise-function-async': 'off',
+        '@typescript-eslint/prefer-readonly': 'off',
         quotes: ['error', 'single'],
     },
 };

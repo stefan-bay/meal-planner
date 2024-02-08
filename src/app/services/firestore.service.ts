@@ -13,26 +13,17 @@ import {
 import { type Observable } from 'rxjs';
 
 import { type Recipe } from '../interfaces/recipe';
+import { AuthService } from './auth.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class FirebaseService {
-    firestore: Firestore = inject(Firestore);
-
-    userId = '';
-
-    constructor() {
-        const id = localStorage.getItem('userId');
-        if (id === null) {
-            return;
-        }
-
-        this.userId = id;
-    }
+export class FirestoreService {
+    private readonly firestore = inject(Firestore);
+    private readonly authService = inject(AuthService);
 
     private get recipesPath(): string {
-        return `users/${this.userId}/recipes`;
+        return `users/${this.authService.user()?.uid}/recipes`;
     }
 
     getRecipes(): Observable<Recipe[]> {
@@ -43,8 +34,8 @@ export class FirebaseService {
         return docData(this.getRecipeDocumentRef(id)) as Observable<Recipe>;
     }
 
-    async addRecipe(recipe: Recipe): Promise<void> {
-        await addDoc(this.getRecipesCollectionRef(), recipe);
+    async addRecipe(recipe: Recipe): Promise<DocumentReference> {
+        return await addDoc(this.getRecipesCollectionRef(), recipe);
     }
 
     async updateRecipe(id: string, recipe: Recipe): Promise<void> {

@@ -5,7 +5,7 @@ import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Valid
 import { type Observable, take } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
-import { FirebaseService } from '../../../services/firebase.service';
+import { FirestoreService } from '../../../services/firestore.service';
 import { type Recipe } from '../../../interfaces/recipe';
 import { type RecipeItem } from '../../../interfaces/recipe-item';
 
@@ -19,7 +19,7 @@ export class EditRecipeComponent {
     route = inject(ActivatedRoute);
     router = inject(Router);
     formBuiler = inject(FormBuilder);
-    firebaseService = inject(FirebaseService);
+    firestoreService = inject(FirestoreService);
 
     loading = false;
 
@@ -43,12 +43,12 @@ export class EditRecipeComponent {
 
     @Input()
     set id(recipeId: string) {
-        this._id = recipeId;
-        if (this.id === 'new') {
+        if (recipeId === 'new') {
             return;
         }
+        this._id = recipeId;
 
-        this.recipe$ = this.firebaseService.getRecipe(this.id).pipe(take(1));
+        this.recipe$ = this.firestoreService.getRecipe(this.id).pipe(take(1));
         this.recipe$.subscribe({
             next: (recipe) => {
                 this.initForm(recipe);
@@ -85,12 +85,12 @@ export class EditRecipeComponent {
         this.loading = true;
 
         if (this.id === '') {
-            await this.firebaseService.addRecipe(recipe);
+            const doc = await this.firestoreService.addRecipe(recipe);
+            await this.router.navigate([`../../${doc.id}`], { relativeTo: this.route });
         } else {
-            await this.firebaseService.updateRecipe(this.id, recipe);
+            await this.firestoreService.updateRecipe(this.id, recipe);
+            await this.router.navigate(['../'], { relativeTo: this.route });
         }
-
-        await this.router.navigate(['../'], { relativeTo: this.route });
 
         this.loading = false;
     }

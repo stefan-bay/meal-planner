@@ -1,18 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, RouterOutlet } from '@angular/router';
-import { SidebarIconComponent } from './components/navigation/sidebar-icon/sidebar-icon.component';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 
-const USER_ID = 'vi9c6IYy65nw3I8Bo2bJ';
+import { SidebarIconComponent } from './components/navigation/sidebar-icon/sidebar-icon.component';
+import { SignupComponent } from './components/authentication/signup/signup.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [CommonModule, RouterModule, RouterOutlet, SidebarIconComponent],
+    imports: [CommonModule, RouterModule, SignupComponent, RouterOutlet, SidebarIconComponent],
     templateUrl: './app.component.html',
 })
 export class AppComponent {
+    private readonly authService = inject(AuthService);
+    private readonly router = inject(Router);
+
     constructor() {
-        localStorage.setItem('userId', USER_ID);
+        effect(() => {
+            // undefined = authentication yet to be checked
+            // null = unauthenticated
+            if (this.authService.user() === null) {
+                void this.router.navigate(['/login']);
+            }
+        });
     }
 }
