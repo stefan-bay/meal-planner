@@ -43,10 +43,10 @@ export class EditRecipeComponent {
 
     @Input()
     set id(recipeId: string) {
-        this._id = recipeId;
-        if (this.id === 'new') {
+        if (recipeId === 'new') {
             return;
         }
+        this._id = recipeId;
 
         this.recipe$ = this.firestoreService.getRecipe(this.id).pipe(take(1));
         this.recipe$.subscribe({
@@ -85,12 +85,12 @@ export class EditRecipeComponent {
         this.loading = true;
 
         if (this.id === '') {
-            await this.firestoreService.addRecipe(recipe);
+            const doc = await this.firestoreService.addRecipe(recipe);
+            await this.router.navigate([`../../${doc.id}`], { relativeTo: this.route });
         } else {
             await this.firestoreService.updateRecipe(this.id, recipe);
+            await this.router.navigate(['../'], { relativeTo: this.route });
         }
-
-        await this.router.navigate(['../'], { relativeTo: this.route });
 
         this.loading = false;
     }
