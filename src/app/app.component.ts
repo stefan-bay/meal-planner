@@ -21,6 +21,10 @@ export class AppComponent {
             // undefined = authentication yet to be checked
             // null = unauthenticated
             if (this.authService.user() === null) {
+                const signingUp = this.router.url === '/signup';
+                if (signingUp) {
+                    return;
+                }
                 void this.router.navigate(['/login']);
             }
         });

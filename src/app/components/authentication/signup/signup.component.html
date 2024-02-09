@@ -1,1 +1,32 @@
-<p>signup works!</p>
+<div class="flex h-full w-full items-center justify-center">
+    <div>
+        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+            <div class="text-center text-xl md:mt-0">Signup</div>
+
+            <label class="text-sm">Email</label>
+            <input
+                formControlName="email"
+                type="email"
+                class="mb-2 block w-64 rounded-sm border p-2 text-lg"
+            />
+
+            <label class="text-sm">Password</label>
+            <input
+                formControlName="password"
+                type="password"
+                class="mb-2 block w-64 rounded-sm border p-2 text-lg"
+            />
+
+            <label class="text-sm">Confirm Password</label>
+            <input
+                formControlName="confirmPassword"
+                type="password"
+                class="mb-2 block w-64 rounded-sm border p-2 text-lg"
+            />
+
+            <button type="submit" class="mt-2 w-full rounded-sm bg-blue-600 p-2 text-white">
+                Create Your Account
+            </button>
+        </form>
+    </div>
+</div>
