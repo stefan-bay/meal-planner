@@ -1,13 +1,15 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, computed, inject, signal } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { type Observable, take } from 'rxjs';
+import { Subject, switchMap, catchError, EMPTY } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
 import { type Recipe } from '../../../interfaces/recipe';
 import { type RecipeItem } from '../../../interfaces/recipe-item';
+import { type RecipeState } from '../recipe-state';
 
 @Component({
     selector: 'app-edit-recipe',
@@ -29,9 +31,51 @@ export class EditRecipeComponent {
         items: this.formBuiler.array([]),
     });
 
-    private recipe$: Observable<Recipe> | null = null;
+    error$ = new Subject<any>();
+    recipeId$ = new Subject<string>(); // nexted from input setter
+
+    recipe$ = this.recipeId$.pipe(
+        switchMap((id) => {
+            return this.firestoreService.getRecipe(id).pipe(
+                catchError((err) => {
+                    this.error$.next(err);
+                    return EMPTY;
+                }),
+            );
+        }),
+    );
+
+    recipe = computed(() => this.state().recipe);
+    error = computed(() => this.state().error);
+    status = computed(() => this.state().status);
+
+    private state = signal<RecipeState>({
+        recipe: null,
+        status: 'pending',
+        error: null,
+    });
 
     private _id = '';
+
+    constructor() {
+        this.recipe$.pipe(takeUntilDestroyed()).subscribe((recipe) => {
+            if (recipe) {
+                this.initForm(recipe);
+            }
+            this.state.update((state) => ({
+                ...state,
+                recipe: recipe ?? null,
+                status: recipe ? 'success' : 'error',
+            }));
+        });
+
+        this.error$.pipe(takeUntilDestroyed()).subscribe({
+            next: (error) => {
+                console.error(error);
+                this.state.update((state) => ({ ...state, error }));
+            },
+        });
+    }
 
     get items(): FormArray {
         return this.recipeForm.controls['items'] as FormArray;
@@ -43,17 +87,8 @@ export class EditRecipeComponent {
 
     @Input()
     set id(recipeId: string) {
-        if (recipeId === 'new') {
-            return;
-        }
+        this.recipeId$.next(recipeId);
         this._id = recipeId;
-
-        this.recipe$ = this.firestoreService.getRecipe(this.id).pipe(take(1));
-        this.recipe$.subscribe({
-            next: (recipe) => {
-                this.initForm(recipe);
-            },
-        });
     }
 
     addItem(index = -1): void {
