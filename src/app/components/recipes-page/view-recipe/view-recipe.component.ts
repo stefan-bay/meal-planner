@@ -7,7 +7,7 @@ import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageNotFoundComponent } from '../../page-not-found/page-not-found.component';
-import { type RecipeState } from '../../../interfaces/recipe-state';
+import { type RecipeState } from '../recipe-state';
 
 @Component({
     selector: 'app-view-recipe',
