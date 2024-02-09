@@ -30,7 +30,7 @@ export class FirestoreService {
         return collectionData(this.getRecipesCollectionRef(), { idField: 'id' }) as Observable<Recipe[]>;
     }
 
-    getRecipe(id: string): Observable<Recipe> {
+    getRecipe(id: string): Observable<Recipe | undefined> {
         return docData(this.getRecipeDocumentRef(id)) as Observable<Recipe>;
     }
 
