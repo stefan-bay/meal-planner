@@ -4,13 +4,10 @@ import { Router } from '@angular/router';
 import { EMPTY, Subject, catchError, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { sameAs } from '../../../utils/validators';
 import { AuthService } from '../../../services/auth.service';
+import { sameAs } from '../../../utils/validators';
 import { type AuthCredentials } from '../../../interfaces/auth-credentials';
-
-interface SignupState {
-    status: 'pending' | 'signing up' | 'error' | 'success';
-}
+import { type AuthState } from '../auth-state';
 
 @Component({
     selector: 'app-signup',
@@ -45,13 +42,13 @@ export class SignupComponent {
         }),
     );
 
-    private state = signal<SignupState>({
+    private state = signal<AuthState>({
         status: 'pending',
     });
 
     constructor() {
         this.signup$.pipe(takeUntilDestroyed()).subscribe(() => {
-            this.state.update((state) => ({ ...state, status: 'signing up' }));
+            this.state.update((state) => ({ ...state, status: 'in progress' }));
         });
 
         this.signedUp$.pipe(takeUntilDestroyed()).subscribe(() => {
