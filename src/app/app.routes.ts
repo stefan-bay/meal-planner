@@ -9,6 +9,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { SettingsComponent } from './components/settings/settings.component';
 
 import { authGuard } from './guards/auth.guard';
+import { GeneralListComponent } from './components/general-list-page/general-list/general-list.component';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,11 @@ export const routes: Routes = [
     {
         path: 'signup',
         component: SignupComponent,
+    },
+    {
+        path: 'general-list',
+        canActivate: [authGuard()],
+        component: GeneralListComponent,
     },
     {
         path: 'recipes',
