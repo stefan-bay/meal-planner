@@ -1,4 +1,4 @@
-<ng-container *ngIf="recipe() as recipe; else loadingOrErrorRef">
+<ng-container *ngIf="recipe$ | async as recipe; else loadingOrErrorRef">
     <app-topbar>
         <div class="text-xl">
             <b>{{ recipe.name }}</b>

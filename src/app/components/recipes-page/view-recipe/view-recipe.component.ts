@@ -1,13 +1,13 @@
-import { Component, Input, computed, inject, signal } from '@angular/core';
+import { Component, Input, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Subject, switchMap, catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, tap, type Observable } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PageNotFoundComponent } from '../../page-not-found/page-not-found.component';
-import { type RecipeState } from '../recipe-state';
+import { type Recipe } from '../../../interfaces/recipe';
+import { type AsyncStatus } from '../../../interfaces/async-status';
 
 @Component({
     selector: 'app-view-recipe',
@@ -18,48 +18,11 @@ import { type RecipeState } from '../recipe-state';
 export class ViewRecipeComponent {
     firestoreService = inject(FirestoreService);
 
-    error$ = new Subject<any>();
-    recipeId$ = new Subject<string>(); // nexted from input setter
+    status = signal<AsyncStatus>('pending');
 
-    recipe$ = this.recipeId$.pipe(
-        switchMap((id) => {
-            return this.firestoreService.getRecipe(id).pipe(
-                catchError((err) => {
-                    this.error$.next(err);
-                    return EMPTY;
-                }),
-            );
-        }),
-    );
-
-    recipe = computed(() => this.state().recipe);
-    error = computed(() => this.state().error);
-    status = computed(() => this.state().status);
-
-    private state = signal<RecipeState>({
-        recipe: null,
-        status: 'pending',
-        error: null,
-    });
+    recipe$: Observable<Recipe | undefined> | null = null;
 
     private _id = '';
-
-    constructor() {
-        this.recipe$.pipe(takeUntilDestroyed()).subscribe((recipe) => {
-            this.state.update((state) => ({
-                ...state,
-                recipe: recipe ?? null,
-                status: recipe ? 'success' : 'error',
-            }));
-        });
-
-        this.error$.pipe(takeUntilDestroyed()).subscribe({
-            next: (error) => {
-                console.error(error);
-                this.state.update((state) => ({ ...state, error }));
-            },
-        });
-    }
 
     get id(): string {
         return this._id;
@@ -67,7 +30,18 @@ export class ViewRecipeComponent {
 
     @Input()
     set id(recipeId: string) {
-        this.recipeId$.next(recipeId);
+        this.recipe$ = this.firestoreService.getRecipe(recipeId).pipe(
+            catchError((err) => {
+                console.error(err);
+                this.status.update(() => 'error');
+                return EMPTY;
+            }),
+            tap((recipe) => {
+                if (recipe === undefined) {
+                    this.status.update(() => 'error');
+                }
+            }),
+        );
         this._id = recipeId;
     }
 }
