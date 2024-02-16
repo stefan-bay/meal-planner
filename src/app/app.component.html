@@ -1,6 +1,7 @@
 <!-- Sidebar -->
 <div
     class="fixed bottom-0 flex h-20 w-screen flex-row items-center bg-gray-300 px-2 blur-none md:top-0 md:h-screen md:w-16 md:flex-col md:py-2"
+    [style.display]="!authService.user() ? 'none' : ''"
 >
     <a class="cursor-default" routerLink="/home">
         <app-sidebar-icon>

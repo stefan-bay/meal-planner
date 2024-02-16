@@ -13,8 +13,8 @@ import { AuthService } from './services/auth.service';
     templateUrl: './app.component.html',
 })
 export class AppComponent {
-    private readonly authService = inject(AuthService);
-    private readonly router = inject(Router);
+    authService = inject(AuthService);
+    router = inject(Router);
 
     constructor() {
         effect(() => {
