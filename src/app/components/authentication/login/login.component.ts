@@ -1,19 +1,17 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EMPTY, Subject, catchError, switchMap } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { type AuthCredentials } from '../../../interfaces/auth-credentials';
 
-interface LoginState {
-    status: 'pending' | 'logging in' | 'error' | 'success';
-}
+import { AuthService } from '../../../services/auth.service';
+import { type AuthCredentials } from '../../../interfaces/auth-credentials';
+import { type AuthState } from '../auth-state';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, RouterLink],
     templateUrl: './login.component.html',
 })
 export class LoginComponent {
@@ -43,13 +41,13 @@ export class LoginComponent {
         }),
     );
 
-    private state = signal<LoginState>({
+    private state = signal<AuthState>({
         status: 'pending',
     });
 
     constructor() {
         this.login$.pipe(takeUntilDestroyed()).subscribe(() => {
-            this.state.update((state) => ({ ...state, status: 'logging in' }));
+            this.state.update((state) => ({ ...state, status: 'in progress' }));
         });
 
         this.loggedIn$.pipe(takeUntilDestroyed()).subscribe(() => {

@@ -10,7 +10,7 @@ import {
     addDoc,
     setDoc,
 } from '@angular/fire/firestore';
-import { type Observable } from 'rxjs';
+import { map, type Observable } from 'rxjs';
 
 import { type Recipe } from '../interfaces/recipe';
 import { AuthService } from './auth.service';
@@ -31,7 +31,14 @@ export class FirestoreService {
     }
 
     getRecipe(id: string): Observable<Recipe> {
-        return docData(this.getRecipeDocumentRef(id)) as Observable<Recipe>;
+        return docData(this.getRecipeDocumentRef(id)).pipe(
+            map((recipe) => {
+                if (recipe === undefined) {
+                    throw new Error('Recipe not found');
+                }
+                return recipe;
+            }),
+        ) as Observable<Recipe>;
     }
 
     async addRecipe(recipe: Recipe): Promise<DocumentReference> {
