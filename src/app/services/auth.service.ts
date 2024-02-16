@@ -22,6 +22,11 @@ interface AuthState {
     providedIn: 'root',
 })
 export class AuthService {
+    /**
+     * The currently logged in user or...
+     * undefined: if authentication not yet checked
+     * null     : if unauthenticated
+     */
     user = computed(() => this.state().user);
 
     private readonly auth = inject(Auth);
