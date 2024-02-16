@@ -1,7 +1,7 @@
 import { Component, Input, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { catchError, EMPTY, tap, type Observable } from 'rxjs';
+import { catchError, EMPTY, type Observable } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
