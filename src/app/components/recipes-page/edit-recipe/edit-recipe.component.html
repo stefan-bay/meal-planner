@@ -16,9 +16,9 @@
             <button
                 class="ml-auto flex w-24 items-center justify-center rounded-md py-2 transition-all hover:bg-gray-300"
                 type="submit"
-                [disabled]="loading"
+                [disabled]="status() === 'in progress'"
             >
-                @if (loading) {
+                @if (status() === 'in progress') {
                     <div class="mr-1">
                         <i class="gg-spinner"></i>
                     </div>

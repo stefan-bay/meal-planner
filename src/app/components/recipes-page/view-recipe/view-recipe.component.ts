@@ -20,7 +20,7 @@ export class ViewRecipeComponent {
 
     status = signal<AsyncStatus>('pending');
 
-    recipe$: Observable<Recipe | undefined> | null = null;
+    recipe$: Observable<Recipe> | null = null;
 
     private _id = '';
 
@@ -35,11 +35,6 @@ export class ViewRecipeComponent {
                 console.error(err);
                 this.status.update(() => 'error');
                 return EMPTY;
-            }),
-            tap((recipe) => {
-                if (recipe === undefined) {
-                    this.status.update(() => 'error');
-                }
             }),
         );
         this._id = recipeId;
