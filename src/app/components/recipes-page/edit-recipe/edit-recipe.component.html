@@ -1,4 +1,4 @@
-<ng-container *ngIf="recipe$ | async as recipe; else loadingOrErrorRef">
+<ng-container *ngIf="status() === 'success' || (recipe$ | async) as recipe; else loadingOrErrorRef">
     <form
         *ngIf="status() !== 'error' && status; else loadingOrErrorRef"
         (ngSubmit)="saveClicked()"

@@ -48,6 +48,7 @@ export class EditRecipeComponent implements OnDestroy {
     @Input()
     set id(recipeId: string) {
         if (recipeId === 'new') {
+            this.status.update(() => 'success');
             return;
         }
         this._id = recipeId;
