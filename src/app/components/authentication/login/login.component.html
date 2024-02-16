@@ -1,5 +1,5 @@
 @if (authService.user() !== undefined) {
-    <div class="flex h-full w-full items-center justify-center">
+    <div class="flex h-full w-full flex-col items-center justify-center">
         <div>
             <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
                 <div class="text-center text-xl md:mt-0">Log in</div>
@@ -23,5 +23,6 @@
                 }
             </form>
         </div>
+        <a class="mt-2 text-sm" routerLink="/signup">click here to sign up</a>
     </div>
 }

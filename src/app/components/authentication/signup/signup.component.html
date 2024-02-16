@@ -1,4 +1,4 @@
-<div class="flex h-full w-full items-center justify-center">
+<div class="flex h-full w-full flex-col items-center justify-center">
     <div>
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
             <div class="text-center text-xl md:mt-0">Signup</div>
@@ -29,4 +29,5 @@
             </button>
         </form>
     </div>
+    <a class="mt-2 text-sm" routerLink="/login">click here to sign in</a>
 </div>
