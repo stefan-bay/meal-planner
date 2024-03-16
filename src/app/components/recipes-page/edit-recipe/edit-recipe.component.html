@@ -1,13 +1,13 @@
 <ng-container *ngIf="status() === 'success' || (recipe$ | async) as recipe; else loadingOrErrorRef">
     <form
         *ngIf="status() !== 'error' && status; else loadingOrErrorRef"
-        (ngSubmit)="saveClicked()"
+        (ngSubmit)="save$.next()"
         [formGroup]="recipeForm"
     >
         <!-- Top Bar -->
         <app-topbar>
             <b class="text-xl">
-                @if (id === 'new') {
+                @if (newRecipe()) {
                     New Recipe
                 } @else {
                     Edit Recipe

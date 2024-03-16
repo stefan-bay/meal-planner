@@ -1,8 +1,9 @@
-import { Component, Input, type OnDestroy, inject, signal } from '@angular/core';
+import { Component, inject, signal, type Signal, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { type Observable, take, catchError, EMPTY, Subject, takeUntil } from 'rxjs';
+import { type Observable, take, catchError, EMPTY, Subject, filter, switchMap, iif } from 'rxjs';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
@@ -17,7 +18,7 @@ import { PageNotFoundComponent } from '../../page-not-found/page-not-found.compo
     imports: [TopbarComponent, ReactiveFormsModule, CommonModule, PageNotFoundComponent],
     templateUrl: './edit-recipe.component.html',
 })
-export class EditRecipeComponent implements OnDestroy {
+export class EditRecipeComponent {
     route = inject(ActivatedRoute);
     router = inject(Router);
     formBuiler = inject(FormBuilder);
@@ -30,47 +31,70 @@ export class EditRecipeComponent implements OnDestroy {
     });
 
     status = signal<AsyncStatus>('pending');
+    id: Signal<string> = input.required<string>();
+    newRecipe = computed(() => this.id() === 'new');
 
-    recipe$: Observable<Recipe> | null = null;
+    id$ = toObservable(this.id);
 
-    private _id = '';
+    save$ = new Subject<void>();
 
-    private unsubscribe$ = new Subject<boolean>();
+    savedRecipe$ = this.save$.pipe(
+        switchMap(() =>
+            iif(
+                this.newRecipe,
+                this.firestoreService.addRecipe(this.recipeFormValue),
+                this.firestoreService.updateRecipe(this.id(), this.recipeFormValue),
+            ),
+        ),
+    );
 
-    get items(): FormArray {
-        return this.recipeForm.controls['items'] as FormArray;
-    }
+    recipe$: Observable<Recipe> = this.id$.pipe(
+        filter(() => !this.newRecipe()),
+        switchMap((id) =>
+            this.firestoreService.getRecipe(id).pipe(
+                take(1),
+                catchError(() => {
+                    this.status.update(() => 'error');
+                    return EMPTY;
+                }),
+            ),
+        ),
+    );
 
-    get id(): string {
-        return this._id;
-    }
+    constructor() {
+        this.id$.pipe(takeUntilDestroyed()).subscribe((id) => {
+            if (this.newRecipe()) {
+                this.status.set('success');
+                return;
+            }
+            this.status.set('in progress');
+        });
 
-    @Input()
-    set id(recipeId: string) {
-        if (recipeId === 'new') {
-            this.status.update(() => 'success');
-            return;
-        }
-        this._id = recipeId;
+        this.recipe$.pipe(takeUntilDestroyed()).subscribe((recipe) => {
+            this.initForm(recipe);
+            this.status.set('success');
+        });
 
-        this.recipe$ = this.firestoreService.getRecipe(this.id).pipe(
-            takeUntil(this.unsubscribe$),
-            take(1),
-            catchError(() => {
-                this.status.update(() => 'error');
-                return EMPTY;
-            }),
-        );
-        this.recipe$.subscribe({
-            next: (recipe) => {
-                this.initForm(recipe);
-            },
+        this.save$.pipe(takeUntilDestroyed()).subscribe(() => {
+            this.status.set('in progress');
+        });
+
+        this.savedRecipe$.pipe(takeUntilDestroyed()).subscribe((doc) => {
+            this.status.set('success');
+            if (doc) {
+                void this.router.navigate([`../../${doc.id}`], { relativeTo: this.route });
+                return;
+            }
+            void this.router.navigate(['../'], { relativeTo: this.route });
         });
     }
 
-    ngOnDestroy(): void {
-        this.unsubscribe$.next(true);
-        this.unsubscribe$.unsubscribe();
+    get recipeFormValue(): Recipe {
+        return this.recipeForm.value;
+    }
+
+    get items(): FormArray {
+        return this.recipeForm.controls['items'] as FormArray;
     }
 
     addItem(index = -1): void {
@@ -91,25 +115,6 @@ export class EditRecipeComponent implements OnDestroy {
 
     removeItem(itemIndex: number): void {
         this.items.removeAt(itemIndex);
-    }
-
-    async saveClicked(): Promise<void> {
-        if (this.recipeForm.invalid) {
-            return;
-        }
-        const recipe = this.recipeForm.value as Recipe;
-
-        this.status.update(() => 'in progress');
-
-        if (this.id === '') {
-            const doc = await this.firestoreService.addRecipe(recipe);
-            await this.router.navigate([`../../${doc.id}`], { relativeTo: this.route });
-        } else {
-            await this.firestoreService.updateRecipe(this.id, recipe);
-            await this.router.navigate(['../'], { relativeTo: this.route });
-        }
-
-        this.status.update(() => 'success');
     }
 
     private initForm(recipe: Recipe): void {
