@@ -1,9 +1,20 @@
-import { Component, inject, signal, type Signal, input, computed } from '@angular/core';
+import {
+    Component,
+    inject,
+    signal,
+    type Signal,
+    input,
+    computed,
+    viewChild,
+    effect,
+    untracked,
+    type ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { type FormArray, type FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { type Observable, take, catchError, EMPTY, Subject, filter, switchMap, iif } from 'rxjs';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
@@ -19,6 +30,8 @@ import { PageNotFoundComponent } from '../../page-not-found/page-not-found.compo
     templateUrl: './edit-recipe.component.html',
 })
 export class EditRecipeComponent {
+    instructionsText = viewChild.required<ElementRef>('instructionsTextArea');
+
     route = inject(ActivatedRoute);
     router = inject(Router);
     formBuiler = inject(FormBuilder);
@@ -37,13 +50,12 @@ export class EditRecipeComponent {
     id$ = toObservable(this.id);
 
     save$ = new Subject<void>();
-
     savedRecipe$ = this.save$.pipe(
         switchMap(() =>
             iif(
                 this.newRecipe,
-                this.firestoreService.addRecipe(this.recipeFormValue),
-                this.firestoreService.updateRecipe(this.id(), this.recipeFormValue),
+                this.firestoreService.addRecipe(this.recipeFormValue), // TODO: error handling
+                this.firestoreService.updateRecipe(this.id(), this.recipeFormValue), // TODO: error handling
             ),
         ),
     );
@@ -60,6 +72,8 @@ export class EditRecipeComponent {
             ),
         ),
     );
+
+    recipe = toSignal(this.recipe$);
 
     constructor() {
         this.id$.pipe(takeUntilDestroyed()).subscribe((id) => {
@@ -86,6 +100,16 @@ export class EditRecipeComponent {
                 return;
             }
             void this.router.navigate(['../'], { relativeTo: this.route });
+        });
+
+        // Auto update text area after recipe loaded
+        const updateInstructions = effect(() => {
+            const it = this.instructionsText();
+            const recipe = untracked(this.recipe);
+            if (it && recipe) {
+                it.nativeElement.parentNode.dataset.replicatedValue = recipe.instructions;
+                updateInstructions.destroy();
+            }
         });
     }
 
@@ -134,11 +158,5 @@ export class EditRecipeComponent {
             instructions: [recipe.instructions],
             items: this.formBuiler.array(itemForms),
         });
-
-        // Automatically resize instructions text-area after loading
-        const instructionsEl = document.getElementById('instructions');
-        if (instructionsEl) {
-            (instructionsEl.parentNode as HTMLElement).dataset['replicatedValue'] = recipe.instructions;
-        }
     }
 }

@@ -111,8 +111,8 @@
                 <label class="mb-1 text-xl" for="instructions">Instructions</label>
                 <div class="grow-wrap">
                     <textarea
+                        #instructionsTextArea
                         formControlName="instructions"
-                        id="instructions"
                         class="h-full w-full resize-none bg-gray-100 p-2"
                         onInput="this.parentNode.dataset.replicatedValue = this.value"
                     ></textarea>
