@@ -30,7 +30,7 @@ import { PageNotFoundComponent } from '../../page-not-found/page-not-found.compo
     templateUrl: './edit-recipe.component.html',
 })
 export class EditRecipeComponent {
-    instructionsText = viewChild.required<ElementRef>('instructionsTextArea');
+    instructionsText = viewChild<ElementRef>('instructionsTextArea');
 
     route = inject(ActivatedRoute);
     router = inject(Router);
@@ -76,7 +76,7 @@ export class EditRecipeComponent {
     recipe = toSignal(this.recipe$);
 
     constructor() {
-        this.id$.pipe(takeUntilDestroyed()).subscribe((id) => {
+        this.id$.pipe(takeUntilDestroyed()).subscribe(() => {
             if (this.newRecipe()) {
                 this.status.set('success');
                 return;
@@ -103,12 +103,11 @@ export class EditRecipeComponent {
         });
 
         // Auto update text area after recipe loaded
-        const updateInstructions = effect(() => {
+        effect(() => {
             const it = this.instructionsText();
             const recipe = untracked(this.recipe);
             if (it && recipe) {
                 it.nativeElement.parentNode.dataset.replicatedValue = recipe.instructions;
-                updateInstructions.destroy();
             }
         });
     }
