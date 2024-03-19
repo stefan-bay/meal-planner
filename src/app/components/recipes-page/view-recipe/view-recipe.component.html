@@ -42,7 +42,7 @@
             <!-- Instructions -->
             <div class="mt-2 text-left text-xl">Instructions</div>
             @if (recipe.instructions) {
-                <div>{{ recipe.instructions }}</div>
+                <div class="whitespace-pre-wrap">{{ recipe.instructions }}</div>
             } @else {
                 <i>No instructions</i>
             }
