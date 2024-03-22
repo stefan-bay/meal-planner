@@ -1,8 +1,8 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, switchMap, take } from 'rxjs';
+import { Subject, switchMap } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
