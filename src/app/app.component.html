@@ -1,15 +1,21 @@
 <!-- Sidebar -->
 <div
-    class="fixed bottom-0 flex h-20 w-screen flex-row items-center bg-gray-300 px-2 blur-none md:top-0 md:h-screen md:w-16 md:flex-col md:py-2"
+    class="fixed bottom-0 flex h-20 w-screen flex-row items-center justify-around bg-gray-300 px-2 blur-none md:top-0 md:h-screen md:w-16 md:flex-col md:py-2"
+    [style.display]="!authService.user() ? 'none' : ''"
 >
     <a class="cursor-default" routerLink="/home">
         <app-sidebar-icon>
             <i class="gg-home-alt"></i>
         </app-sidebar-icon>
     </a>
+    <a class="cursor-default" routerLink="/general-list">
+        <app-sidebar-icon>
+            <i class="gg-calendar-two"></i>
+        </app-sidebar-icon>
+    </a>
     <a class="cursor-default" routerLink="/recipes">
         <app-sidebar-icon>
-            <i class="gg-list"></i>
+            <i class="gg-briefcase"></i>
         </app-sidebar-icon>
     </a>
     <a class="cursor-default" class="md:mt-auto" routerLink="/settings">
@@ -19,7 +25,7 @@
     </a>
 </div>
 
-<!-- Main content -->
-<main class="mb-20 h-1 min-h-screen md:mb-0 md:pl-16">
+<main class="md:pl-16">
     <router-outlet></router-outlet>
+    <div class="h-20 w-screen md:hidden"></div>
 </main>

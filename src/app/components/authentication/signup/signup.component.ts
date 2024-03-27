@@ -75,7 +75,7 @@ export class SignupComponent {
         return this.formGroup.value.password ?? null;
     }
 
-    async onSubmit(): Promise<void> {
+    onSubmit(): void {
         if (!this.email || !this.password) {
             return;
         }

@@ -1,13 +1,14 @@
-import { Component, Input, inject, signal } from '@angular/core';
+import { Component, inject, signal, input, type Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { catchError, EMPTY, type Observable } from 'rxjs';
+import { catchError, EMPTY, switchMap, type Observable } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
 import { PageNotFoundComponent } from '../../page-not-found/page-not-found.component';
 import { type Recipe } from '../../../interfaces/recipe';
 import { type AsyncStatus } from '../../../interfaces/async-status';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-view-recipe',
@@ -19,24 +20,17 @@ export class ViewRecipeComponent {
     firestoreService = inject(FirestoreService);
 
     status = signal<AsyncStatus>('pending');
+    id: Signal<string> = input.required<string>();
 
-    recipe$: Observable<Recipe> | null = null;
-
-    private _id = '';
-
-    get id(): string {
-        return this._id;
-    }
-
-    @Input()
-    set id(recipeId: string) {
-        this.recipe$ = this.firestoreService.getRecipe(recipeId).pipe(
-            catchError((err) => {
-                console.error(err);
-                this.status.update(() => 'error');
-                return EMPTY;
-            }),
-        );
-        this._id = recipeId;
-    }
+    recipe$: Observable<Recipe> = toObservable(this.id).pipe(
+        switchMap((id) =>
+            this.firestoreService.getRecipe(id).pipe(
+                catchError((err) => {
+                    console.error(err);
+                    this.status.update(() => 'error');
+                    return EMPTY;
+                }),
+            ),
+        ),
+    );
 }

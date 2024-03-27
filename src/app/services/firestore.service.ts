@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import {
     type CollectionReference,
     type DocumentReference,
@@ -9,11 +9,15 @@ import {
     docData,
     addDoc,
     setDoc,
+    updateDoc,
 } from '@angular/fire/firestore';
-import { map, type Observable } from 'rxjs';
+import { map, type Observable, from, defer, switchMap, of, concatMap } from 'rxjs';
 
 import { type Recipe } from '../interfaces/recipe';
+import { type GeneralList } from '../interfaces/general-list';
 import { AuthService } from './auth.service';
+
+const generalListDocumentId = '0general_list';
 
 @Injectable({
     providedIn: 'root',
@@ -22,8 +26,19 @@ export class FirestoreService {
     private readonly firestore = inject(Firestore);
     private readonly authService = inject(AuthService);
 
-    private get recipesPath(): string {
-        return `users/${this.authService.user()?.uid}/recipes`;
+    private userPath = computed(() => `users/${this.authService.user()?.uid}`);
+    private recipesPath = computed(() => `${this.userPath()}/recipes`);
+    private planPath = computed(() => `${this.userPath()}/plan`);
+
+    getGeneralList(): Observable<GeneralList> {
+        return docData(this.getGeneralListDocumentRef()).pipe(
+            switchMap((generalList) => {
+                if (!generalList) {
+                    return this.createGeneralList().pipe(concatMap(() => this.getGeneralList())); // TODO: error handling
+                }
+                return of(generalList);
+            }),
+        ) as Observable<GeneralList>;
     }
 
     getRecipes(): Observable<Recipe[]> {
@@ -41,19 +56,31 @@ export class FirestoreService {
         ) as Observable<Recipe>;
     }
 
-    async addRecipe(recipe: Recipe): Promise<DocumentReference> {
-        return await addDoc(this.getRecipesCollectionRef(), recipe);
+    createGeneralList(): Observable<void> {
+        return from(defer(() => setDoc(this.getGeneralListDocumentRef(), { items: [], recipes: [] })));
     }
 
-    async updateRecipe(id: string, recipe: Recipe): Promise<void> {
-        await setDoc(this.getRecipeDocumentRef(id), recipe);
+    updateGeneralList(generalList: Record<keyof GeneralList, unknown[]>): Observable<void> {
+        return from(defer(() => updateDoc(this.getGeneralListDocumentRef(), generalList)));
+    }
+
+    addRecipe(recipe: Recipe): Observable<DocumentReference> {
+        return from(defer(() => addDoc(this.getRecipesCollectionRef(), recipe)));
+    }
+
+    updateRecipe(id: string, recipe: Recipe): Observable<void> {
+        return from(defer(() => setDoc(this.getRecipeDocumentRef(id), recipe)));
+    }
+
+    private getGeneralListDocumentRef(): DocumentReference {
+        return doc(this.firestore, this.planPath(), generalListDocumentId);
     }
 
     private getRecipesCollectionRef(): CollectionReference {
-        return collection(this.firestore, this.recipesPath);
+        return collection(this.firestore, this.recipesPath());
     }
 
     private getRecipeDocumentRef(id: string): DocumentReference {
-        return doc(this.firestore, this.recipesPath, id);
+        return doc(this.firestore, this.recipesPath(), id);
     }
 }

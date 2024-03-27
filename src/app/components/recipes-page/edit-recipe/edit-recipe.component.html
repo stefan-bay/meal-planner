@@ -1,13 +1,13 @@
 <ng-container *ngIf="status() === 'success' || (recipe$ | async) as recipe; else loadingOrErrorRef">
     <form
         *ngIf="status() !== 'error' && status; else loadingOrErrorRef"
-        (ngSubmit)="saveClicked()"
+        (ngSubmit)="save$.next()"
         [formGroup]="recipeForm"
     >
         <!-- Top Bar -->
         <app-topbar>
             <b class="text-xl">
-                @if (id === 'new') {
+                @if (newRecipe()) {
                     New Recipe
                 } @else {
                     Edit Recipe
@@ -111,8 +111,8 @@
                 <label class="mb-1 text-xl" for="instructions">Instructions</label>
                 <div class="grow-wrap">
                     <textarea
+                        #instructionsTextArea
                         formControlName="instructions"
-                        id="instructions"
                         class="h-full w-full resize-none bg-gray-100 p-2"
                         onInput="this.parentNode.dataset.replicatedValue = this.value"
                     ></textarea>

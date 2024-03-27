@@ -8,7 +8,7 @@
     </a>
 </app-topbar>
 
-<div class="h-auto space-y-4 px-3 pt-3">
+<div class="h-auto space-y-4 px-3 py-3">
     <ng-container *ngIf="recipes$ | async as recipes; else loadingRef">
         <a
             *ngFor="let recipe of recipes"
@@ -31,16 +31,8 @@
                     </div>
                 </div>
             </div>
-            <!-- Instructions -->
-            <div class="mt-2">
-                <i>
-                    {{ recipe.instructions }}
-                </i>
-            </div>
         </a>
     </ng-container>
-    <!-- Spacer -->
-    <div class="h-4"></div>
 </div>
 
 <!-- Loading -->

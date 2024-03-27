@@ -2,11 +2,10 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { type Observable } from 'rxjs';
+import { map } from 'rxjs';
 
 import { TopbarComponent } from '../../navigation/topbar/topbar.component';
 import { FirestoreService } from '../../../services/firestore.service';
-import { type Recipe } from '../../../interfaces/recipe';
 
 @Component({
     selector: 'app-list-recipes',
@@ -16,9 +15,9 @@ import { type Recipe } from '../../../interfaces/recipe';
 })
 export class ListRecipesComponent {
     firestoreService = inject(FirestoreService);
-    recipes$: Observable<Recipe[]>;
-
-    constructor() {
-        this.recipes$ = this.firestoreService.getRecipes();
-    }
+    recipes$ = this.firestoreService
+        .getRecipes()
+        .pipe(
+            map((recipe) => recipe.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))),
+        );
 }
